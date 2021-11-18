@@ -1,1 +1,1 @@
-# eslint-staged
+# staged-linter

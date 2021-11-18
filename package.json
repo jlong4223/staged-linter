@@ -1,10 +1,10 @@
 {
-  "name": "eslint-staged",
+  "name": "staged-linter",
   "version": "1.0.0",
   "description": "Run eslint on only staged files.",
   "main": "index.js",
   "bin": {
-    "eslint-staged": "./bin/eslint-staged.js"
+    "staged-linter": "./bin/staged-linter.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
