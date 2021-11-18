@@ -20,4 +20,4 @@ This packaged will run eslint against all staged files.
 
 It will quickly generate a `.txt` file with all of your staged files. This file will be read to obtain the list of files to lint, then eslint will be run against each file, and the results will be displayed in the terminal. The `.txt` file will be deleted after the linting is complete like it was never there to begin with.
 
-![staged-linter](docs/staged-linter.png)
+![staged-linter](https://i.imgur.com/9H3Lnj8.png)
