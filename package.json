@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jlong4223/eslint-staged.git"
+    "url": "git+https://github.com/jlong4223/staged-linter"
   },
   "keywords": [
     "eslint",
@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/jlong4223/eslint-staged/issues"
   },
-  "homepage": "https://github.com/jlong4223/eslint-staged#readme",
+  "homepage": "https://github.com/jlong4223/staged-linter#readme",
   "dependencies": {
     "chalk": "^4.1.2",
     "shelljs": "^0.8.4"
