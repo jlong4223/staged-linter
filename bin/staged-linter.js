@@ -4,6 +4,7 @@
 const fs = require("fs");
 const shell = require("shelljs");
 const chalk = require("chalk");
+const { spawn } = require("child_process");
 
 const stagedFile = "staged.txt";
 let args;
@@ -48,24 +49,30 @@ if (arrOfFiles.length !== 0) {
 
   const executableScript = `npx eslint ${stringFilesToCheck}`;
 
-  shell.exec(executableScript, (code, stdout, stderr) => {
-    let exitCode = code;
-
-    if (exitCode !== 0) console.log(`${chalk.red(stderr)}`);
-
-    if (stdout) exitCode = 1;
-
-    if (!stdout) console.log(`${chalk.green("No errors found 🏆")}`);
-
-    shell.exit(exitCode);
+  const eslint = spawn(executableScript, {
+    shell: true,
+    stdio: "inherit",
   });
 
-  console.log(chalk.green("Linting complete ✅"));
+  eslint.on("close", (code) => {
+    if (code === 0) {
+      console.log(chalk.green("✅  ESLint Passed  🏆"));
+    } else {
+      console.log(chalk.red("🚨  ESLint Failed"));
+      shell.exit(1);
+    }
+  });
+
+  eslint.on("error", (err) => {
+    console.log(chalk.red(err));
+    shell.exit(1);
+  });
 } else {
   console.log(chalk.red("No Staged Files Found - git add files and retry"));
 }
 
-// Remove the generated file - this will not remove a file created by the user if they passed one as an argument
+console.log(chalk.green("Linting complete ✅"));
+
 if (files === stagedFile) {
   console.log(chalk.italic.green(`Removing generated file: ${stagedFile}`));
   shell.exec(`rm -rf ${stagedFile}`);
