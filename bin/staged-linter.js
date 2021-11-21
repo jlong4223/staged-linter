@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 
-let fs = require("fs");
-let shell = require("shelljs");
+const fs = require("fs");
+const shell = require("shelljs");
 const chalk = require("chalk");
 
 const stagedFile = "staged.txt";
@@ -18,7 +18,7 @@ if (args.length !== 0) {
 if (args.length === 0) {
   console.log(
     `No file provided. Creating or using existing file: ${chalk.blue(
-      "staged.txt"
+      stagedFile
     )}`
   );
   shell.exec(`git diff --cached --name-only > ${stagedFile}`);
@@ -29,7 +29,6 @@ if (args.length === 0) {
 const files = args.shift();
 console.log(`Checking ${chalk.blue(files)} for staged changes...`);
 
-// Intitializing the readFileLines with the file
 const readFileLines = (filename) =>
   fs
     .readFileSync(filename)
@@ -48,7 +47,18 @@ if (arrOfFiles.length !== 0) {
   );
 
   const executableScript = `npx eslint ${stringFilesToCheck}`;
-  shell.exec(executableScript);
+
+  shell.exec(executableScript, (code, stdout, stderr) => {
+    let exitCode = code;
+
+    if (exitCode !== 0) console.log(`${chalk.red(stderr)}`);
+
+    if (stdout) exitCode = 1;
+
+    if (!stdout) console.log(`${chalk.green("No errors found 🏆")}`);
+
+    shell.exit(exitCode);
+  });
 
   console.log(chalk.green("Linting complete ✅"));
 } else {
