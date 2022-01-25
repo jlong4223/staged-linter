@@ -29,6 +29,6 @@
   "homepage": "https://github.com/jlong4223/staged-linter#readme",
   "dependencies": {
     "chalk": "^4.1.2",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.5"
   }
 }
