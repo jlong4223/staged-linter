@@ -12,6 +12,7 @@ let providedUserArgs;
 
 // Check for user provided file and provide confirmation of file name
 if (providedUserArgs.length !== 0) {
+  providedUserArgs = providedUserArgs[0];
   console.log(`Your provided file name is... ${providedUserArgs}`);
 }
 
