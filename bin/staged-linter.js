@@ -6,29 +6,23 @@ const shell = require("shelljs");
 const chalk = require("chalk");
 const { spawn } = require("child_process");
 
-const stagedFile = "staged.txt";
-let args;
-[, , ...args] = process.argv;
+const stagedFileName = "staged.txt";
+let providedUserArgs;
+[, , ...providedUserArgs] = process.argv;
 
 // Check for user provided file and provide confirmation of file name
-if (args.length !== 0) {
-  console.log(`Your provided file name is... ${args}`);
+if (providedUserArgs.length !== 0) {
+  console.log(`Your provided file name is... ${providedUserArgs}`);
 }
 
 // If the user doesnt provide a file to check, then one will be created
-if (args.length === 0) {
-  console.log(
-    `No file provided. Creating or using existing file: ${chalk.blue(
-      stagedFile
-    )}`
-  );
-  shell.exec(`git diff --cached --name-only > ${stagedFile}`);
-  args = [stagedFile];
+if (providedUserArgs.length === 0) {
+  console.log(`Creating or using existing file: ${chalk.blue(stagedFileName)}`);
+  shell.exec(`git diff --cached --name-only > ${stagedFileName}`);
+  providedUserArgs = stagedFileName;
 }
 
-// remove the provided arguments from the array
-const files = args.shift();
-console.log(`Checking ${chalk.blue(files)} for staged changes...`);
+console.log(`Checking ${chalk.blue(providedUserArgs)} for staged changes...`);
 
 const readFileLines = (filename) =>
   fs
@@ -37,17 +31,17 @@ const readFileLines = (filename) =>
     .split("\n")
     .filter((file) => file.length > 0);
 
-let arrOfFiles = readFileLines(files);
+const arrayOfStagedFiles = readFileLines(providedUserArgs);
 
-if (arrOfFiles.length !== 0) {
-  console.log(`Staged Files Found: ${chalk.green(arrOfFiles)}`);
+if (arrayOfStagedFiles.length !== 0) {
+  console.log(`Staged Files Found: ${chalk.green(arrayOfStagedFiles)}`);
 
-  let stringFilesToCheck = arrOfFiles.join(" ");
+  let stringsOfStagedFiles = arrayOfStagedFiles.join(" ");
   console.log(
-    chalk.blue(`Linting in progress >>>> 🕵️‍♂️ ${stringFilesToCheck} 👀`)
+    chalk.blue(`Linting in progress >>>> 🕵️‍♂️ ${stringsOfStagedFiles} 👀`)
   );
 
-  const executableScript = `npx eslint ${stringFilesToCheck}`;
+  const executableScript = `npx eslint ${stringsOfStagedFiles}`;
 
   const eslint = spawn(executableScript, {
     shell: true,
@@ -73,7 +67,7 @@ if (arrOfFiles.length !== 0) {
 
 console.log(chalk.green("Linting complete ✅"));
 
-if (files === stagedFile) {
-  console.log(chalk.italic.green(`Removing generated file: ${stagedFile}`));
-  shell.exec(`rm -rf ${stagedFile}`);
+if (providedUserArgs === stagedFileName) {
+  console.log(chalk.italic.green(`Removing generated file: ${stagedFileName}`));
+  shell.exec(`rm -rf ${stagedFileName}`);
 }
